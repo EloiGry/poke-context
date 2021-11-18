@@ -1,57 +1,64 @@
-import React from 'react';
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react'
+
+import { Box, Text, UnorderedList, ListItem, Button } from "@chakra-ui/react"
 
 const Home = () => {
+  const [pokemon, setPokemon] = useState(null)
 
-    const [pokemon, setPokemon] = useState(null)
-    const [random, setRandom] = useState(1)
+  useEffect(() => { // => componentDidMount
+    getPokemon(1)
 
-    useEffect(() => {
-        fetch(`https://pokeapi.co/api/v2/pokemon/${random}`)
-          .then(response => response.json())
-          .then(result => setPokemon(result))
-    }, []);
+    // fetch(`https://pokeapi.co/api/v2/pokemon/1`)
+    //   .then(response => response.json())
+    //   .then(data => setPokemon(data))
+  }, [])
 
-    // useEffect(() => { 
-        
-    //   }, [random])
-    
-    const handleButtonClick = () => {
-        const id = Math.floor(Math.random() * (151 - 1 + 1) + 1) 
-        setRandom(id);
-    }
+  const getPokemon = id => {
+    fetch(`https://pokeapi.co/api/v2/pokemon/${id}`)
+      .then(response => response.json())
+      .then(data => setPokemon(data))
+  }
 
-        
+  const handleButtonClick = () => {
+    const randomId = Math.floor(Math.random() * 151 + 1)
+    getPokemon(randomId)
 
-   
-    if (pokemon == null) {
-        return null
-    } else {
-        // console.log(pokemon.sprites.other["o"])
-        return (
+    // fetch(`https://pokeapi.co/api/v2/pokemon/${randomId}`)
+    //   .then(response => response.json())
+    //   .then(data => setPokemon(data))
+  }
 
-            <>
-                <h1>
-                    HOME
-                </h1>
-                <div> 
-                    <button onClick={handleButtonClick}> Random Pokemon </button>
-                    <img src={pokemon.sprites.other["official-artwork"].front_default} alt={pokemon.name} />
-                    <p> Nom : {pokemon.name} </p>
-                    <p> Taille : {pokemon.height} </p>
-                    <p> Poids : {pokemon.weight} </p>
-                    <p> Type : {pokemon.types.map(type => <ul><li>{type.type.name}</li></ul>)} </p>
-                    
+  if (!pokemon) {
+    return <p>Pas de pokemon</p>
+  }
 
-                </div>
-            </>
-        );
-    }
-    
-};  
+  console.log(pokemon)
 
+  return (
+    <Box>
+       <Box border="1px" borderColor="teal" borderRadius={5} p={5}>
+        <Box mb={5}>
+          <img src={pokemon.sprites.other["official-artwork"].front_default} alt={pokemon.name} />
+        </Box>
+        <Text as="h1" fontSize="30px" casing="capitalize">{pokemon.name}</Text>
+        <Text><b>Height:</b> {pokemon.height}</Text>
+        <Text><b>Weight:</b> {pokemon.weight}</Text>
+        <Text><b>Types:</b></Text>
+        <UnorderedList>
+          {pokemon.types.map(type => (
+            <ListItem key={type.type.name}>{type.type.name}</ListItem>
+          ))}
+        </UnorderedList>
+      </Box>
+      
+      <Button colorScheme="teal" variant="solid" w="100%" mt={5} onClick={handleButtonClick}>
+        Get random pokemon
+      </Button>
+    </Box>
 
-export default Home;
+  )
+}
 
+export default Home
 
 

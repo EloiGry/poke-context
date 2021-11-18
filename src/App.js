@@ -1,24 +1,24 @@
-import React from 'react';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
-import Home from './pages/Home';
-import Login from './pages/Login';
-import NotFound from './pages/NotFound';
-import Nav from './components/Nav';
+import { BrowserRouter, Routes, Route } from "react-router-dom"
+
+import Home from "./pages/Home"
+import Login from "./pages/Login"
+import NotFound from "./pages/NotFound"
+import Nav from "./components/Nav"
+import { Center } from "@chakra-ui/react"
 
 const App = () => {
   return (
     <BrowserRouter>
-
-      <Nav/>
-
-      <Switch> 
-        <Route exact path="/" component={Home}/> 
-        <Route path="/login" component={Login}/> 
-        <Route path="*" component={NotFound}/>
-      </Switch>
-      
+      <Nav />
+      <Center height="100vh">
+        <Routes>
+          <Route exact path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Center>
     </BrowserRouter>
-  );
-};
+  )
+}
 
-export default App;
+export default App
